@@ -1,5 +1,4 @@
-﻿@model WebApplication.Models.KPI
-
+﻿@model KPI
 @{
     ViewBag.Title = "Delete";
 }
@@ -66,15 +65,6 @@
         <dd>
             @Html.DisplayFor(model => model.Email)
         </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.KPl.MucTieu)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.KPl.MucTieu)
-        </dd>
-
     </dl>
 
     @using (Html.BeginForm()) {
@@ -82,7 +72,7 @@
 
         <div class="form-actions no-color">
             <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
+            @Html.ActionLink("Back to List", "Details", new { id = -Model.idKPI })
         </div>
     }
 </div>

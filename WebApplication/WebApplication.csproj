@@ -184,6 +184,9 @@
     <Compile Include="Models\KPI.cs">
       <DependentUpon>Models.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\KpiUser.cs">
+      <DependentUpon>Models.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\Models.Context.cs">
       <AutoGen>True</AutoGen>

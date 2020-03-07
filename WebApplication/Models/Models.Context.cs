@@ -26,5 +26,6 @@ namespace WebApplication.Models
         }
     
         public virtual DbSet<KPI> KPIs { get; set; }
+        public virtual DbSet<KpiUser> KpiUsers { get; set; }
     }
 }

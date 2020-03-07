@@ -18,8 +18,8 @@ namespace WebApplication.Controllers
         // GET: KPI
         public ActionResult Index()
         {
-            var kPIs = db.KPIs.Include(k => k.KP1);
-            return View(kPIs.ToList());
+            var model = db.KPIs.Where(kpi => kpi.idKPI == kpi.id);
+            return View(model.ToList());
         }
 
         // GET: KPI/Details/5
@@ -36,6 +36,7 @@ namespace WebApplication.Controllers
         public ActionResult Create(int id)
         {
             ViewBag.KPI = db.KPIs.Find(-id);
+            ViewBag.Names = db.KpiUsers.First().Names;
             return View(new KPI { idKPI = -id });
         }
 
@@ -48,19 +49,21 @@ namespace WebApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.Email = User.Identity.Name;
+                model.Email = model.Email ?? User.Identity.Name.Split('@')[0];
                 db.KPIs.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Details", new { id = -model.idKPI });
             }
 
             ViewBag.KPI = db.KPIs.Find(model.idKPI);
+            ViewBag.Names = db.KpiUsers.First().Names;
             return View(model);
         }
 
         // GET: KPI/Edit/5
         public ActionResult Edit(int id)
         {
+            ViewBag.Names = db.KpiUsers.First().Names;
             return View(db.KPIs.Find(-id));
         }
 
@@ -79,27 +82,21 @@ namespace WebApplication.Controllers
                 KPI.TyTrong = model.TyTrong;
                 KPI.ChiTieu = model.ChiTieu;
                 KPI.DonViTinh = model.DonViTinh;
+                KPI.Email = model.Email ?? User.Identity.Name.Split('@')[0];
 
                 db.Entry(KPI).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Details", new { id = -KPI.idKPI });
             }
+
+            ViewBag.Names = db.KpiUsers.First().Names;
             return View(db.KPIs.Find(model.id));
         }
 
         // GET: KPI/Delete/5
-        public ActionResult Delete(int? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            KPI kPI = db.KPIs.Find(id);
-            if (kPI == null)
-            {
-                return HttpNotFound();
-            }
-            return View(kPI);
+            return View(db.KPIs.Find(-id));
         }
 
         // POST: KPI/Delete/5
@@ -107,10 +104,10 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            KPI kPI = db.KPIs.Find(id);
-            db.KPIs.Remove(kPI);
+            var model = db.KPIs.Find(-id);
+            db.KPIs.Remove(model);
             db.SaveChanges();
-            return RedirectToAction("Index");
+            return RedirectToAction("Details", new { id = -model.idKPI });
         }
 
         protected override void Dispose(bool disposing)
