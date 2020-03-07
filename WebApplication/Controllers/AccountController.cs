@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using WebApplication.Models;
+using Microsoft.Owin.Security.VanLang;
 
 namespace WebApplication.Controllers
 {
@@ -322,14 +323,14 @@ namespace WebApplication.Controllers
         [AllowAnonymous]
         public async Task<ActionResult> ExternalLoginCallback(string returnUrl)
         {
-            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync();
+            var loginInfo = await AuthenticationManager.GetExternalLoginInfoAsync2();
             if (loginInfo == null)
             {
                 return RedirectToAction("Login");
             }
 
             // Sign in the user with this external login provider if the user already has a login
-            var result = await SignInManager.ExternalSignInAsync(loginInfo, isPersistent: false);
+            var result = await SignInManager.ExternalSignInAsync2(loginInfo, UserManager);
             switch (result)
             {
                 case SignInStatus.Success:

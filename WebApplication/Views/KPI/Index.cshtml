@@ -1,0 +1,74 @@
+﻿@model IEnumerable<KPI>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>BẢNG PHÂN BỔ KPI NĂM HỌC 2019-2020</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.MucTieu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ChiTieu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DonViTinh)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TyTrong)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.KetQua)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.GhiChu)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.KPl.MucTieu)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.ActionLink(item.MucTieu, "Details", new { id = -item.id })
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ChiTieu)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.DonViTinh)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TyTrong)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.KetQua)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.GhiChu)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.KPl.MucTieu)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

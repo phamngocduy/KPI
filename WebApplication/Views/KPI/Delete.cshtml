@@ -1,0 +1,88 @@
+﻿@model WebApplication.Models.KPI
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>KPI</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.MucTieu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MucTieu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ChiTieu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ChiTieu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DonViTinh)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DonViTinh)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TyTrong)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TyTrong)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KetQua)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KetQua)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.GhiChu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.GhiChu)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Email)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.KPl.MucTieu)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.KPl.MucTieu)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
