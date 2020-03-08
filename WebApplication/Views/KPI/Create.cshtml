@@ -1,8 +1,8 @@
 ﻿@model KPI
 @{
     ViewBag.Title = "Create";
-    var names = new SelectList((ViewBag.Names as string).Split(',').Skip(1).OrderBy(s => s.Split(' ').Last())
-        .Select(s => new { Value = s.Replace(" ", "").ToLower(), Text = s }), "Value", "Text", Model.Email?.Split('@')[0]);
+    ViewBag.Names = new MultiSelectList((ViewBag.Names as string).Split(',').Skip(1).OrderBy(s => s.Split(' ').Last())
+                            .Select(s => new { Value = s.Replace(" ", "").ToLower(), Text = s }), "Value", "Text");
 }
 
 @using (Html.BeginForm()) 
@@ -15,48 +15,7 @@
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.idKPI)
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MucTieu, "Mục tiêu", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.TextAreaFor(model => model.MucTieu, new { @class = "form-control", rows = 3 })
-                @Html.ValidationMessageFor(model => model.MucTieu, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.TyTrong, "Tỷ trọng", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="input-group">
-                    @Html.EditorFor(model => model.TyTrong, new { htmlAttributes = new { @class = "form-control" } })
-                    <span class="input-group-addon">%</span>
-                </div>
-                @Html.ValidationMessageFor(model => model.TyTrong, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.ChiTieu, "Chỉ tiêu", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.ChiTieu, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.ChiTieu, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.DonViTinh, "Đơn vị tính", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DonViTinh, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DonViTinh, "", new { @class = "text-danger" })
-            </div>
-        </div>
-
-        <div class="form-group">
-            @Html.LabelFor(model => model.Email, "Owner", htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.DropDownListFor(model => model.Email, names, "Current user or...", new { @class = "form-control" })
-                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @Html.Partial("Edit", Model)
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">

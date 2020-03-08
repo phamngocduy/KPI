@@ -52,11 +52,16 @@ else
             @Html.DisplayFor(modelItem => item.DonViTinh)
         </td>
         <td>
-            @item.Email.Split('@')[0]
+            @item.Email
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id = -item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id = -item.id })
+            <a href="@Url.Action("Update", new { id = -item.id })" class="text-success">
+                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            </a>
+            <span>&nbsp;</span>
+            <a href="@Url.Action("Delete", new { id = -item.id })" class="text-danger">
+                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+            </a>
         </td>
     </tr>
 }

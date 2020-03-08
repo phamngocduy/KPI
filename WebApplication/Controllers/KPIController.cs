@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
+using System.Transactions;
 using WebApplication.Models;
 
 namespace WebApplication.Controllers
@@ -45,13 +46,24 @@ namespace WebApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(KPI model)
+        public ActionResult Create(KPI model, string[] emails)
         {
+            emails = emails ?? new string[] { User.Identity.Name.Split('@')[0] };
             if (ModelState.IsValid)
+            using (var scope = new TransactionScope())
             {
-                model.Email = model.Email ?? User.Identity.Name.Split('@')[0];
-                db.KPIs.Add(model);
+                foreach (var email in emails)
+                    db.KPIs.Add(new KPI
+                    {
+                        Email = email,
+                        idKPI = model.idKPI,
+                        MucTieu = model.MucTieu,
+                        ChiTieu = model.ChiTieu,
+                        DonViTinh = model.DonViTinh,
+                        TyTrong = (int)(model.TyTrong / (float)emails.Length)
+                    });
                 db.SaveChanges();
+                scope.Complete();
                 return RedirectToAction("Details", new { id = -model.idKPI });
             }
 
@@ -61,7 +73,7 @@ namespace WebApplication.Controllers
         }
 
         // GET: KPI/Edit/5
-        public ActionResult Edit(int id)
+        public ActionResult Update(int id)
         {
             ViewBag.Names = db.KpiUsers.First().Names;
             return View(db.KPIs.Find(-id));
@@ -72,7 +84,7 @@ namespace WebApplication.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit(KPI model)
+        public ActionResult Update(KPI model)
         {
             model.id = model.id > 0 ? -model.id : model.id;
             if (ModelState.IsValid)
