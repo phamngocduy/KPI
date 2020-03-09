@@ -6,10 +6,10 @@
 
 <h2>BẢNG PHÂN BỔ KPI NĂM HỌC 2019-2020</h2>
 
-<ul class="breadcrumb">
+<ul class="breadcrumb" style="margin-bottom:0">
 @if (KPI != KPI.KP1)
 {
-    <li>@KPI.MucTieu</li>
+    <li>@KPI.MucTieu (@(KPI.TyTrong)%)</li>
     KPI = KPI != KPI.KP1 ? KPI.KP1 : null;
 }
 else
@@ -19,13 +19,17 @@ else
 }
 @while (KPI != null)
 {
-    <li>@Html.ActionLink(KPI.MucTieu, "Details", new { id = -KPI.id })</li>
+    <li>@Html.ActionLink(String.Format("{0} ({1}%)", KPI.MucTieu, KPI.TyTrong), "Details", new { id = -KPI.id })</li>
     KPI = KPI != KPI.KP1 ? KPI.KP1 : null;
 }
 </ul>
 
+@{ KPI = ViewBag.KPI as KPI; }
+<span class="badge">Chỉ tiêu: @KPI.ChiTieu</span>
+<span class="badge">Đơn vị tính: @KPI.DonViTinh</span>
+
 <p>
-    @Html.ActionLink("Create New", "Create", new { id = -(ViewBag.KPI as KPI).id })
+    @Html.ActionLink("Create New", "Create", new { id = -KPI.id }, new { style = "float:right" })
 </p>
 <table class="table">
     <tr>

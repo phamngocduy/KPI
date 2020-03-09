@@ -1,8 +1,9 @@
 ﻿@model KPI
 @{
     ViewBag.Title = "Create";
+    var KPI = ViewBag.KPI as KPI;
     ViewBag.Names = new MultiSelectList((ViewBag.Names as string).Split(',').Skip(1).OrderBy(s => s.Split(' ').Last())
-                            .Select(s => new { Value = s.Replace(" ", "").ToLower(), Text = s }), "Value", "Text");
+                    .Select(s => new { Value = s.Replace(" ", "").ToLower(), Text = s }), "Value", "Text");
 }
 
 @using (Html.BeginForm()) 
@@ -11,6 +12,9 @@
     
     <div class="form-horizontal">
         <h4>@((ViewBag.KPI as KPI).MucTieu)</h4>
+        <span class="badge">Tỷ trọng: 100%</span>
+        <span class="badge">Chỉ tiêu: @KPI.ChiTieu</span>
+        <span class="badge">Đơn vị tính: @KPI.DonViTinh</span>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
         @Html.HiddenFor(model => model.idKPI)

@@ -1,4 +1,7 @@
 ﻿@model KPI
+@{ 
+    var KPI = (ViewBag.KPI as KPI) ?? Model.KP1;
+}
 
 <div class="form-group">
     @Html.LabelFor(model => model.MucTieu, "Mục tiêu", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -50,3 +53,16 @@
         @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger" })
     </div>
 </div>
+
+@if (KPI.ChiTieu > 0)
+{
+    <script>
+        var chiTieu = @KPI.ChiTieu;
+        document.addEventListener('DOMContentLoaded', function (event) {
+            $('#TyTrong').attr('readonly', true);
+            $('#ChiTieu').keyup(function () {
+                $('#TyTrong').val(Math.round($(this).val() * 100 / chiTieu));
+            });
+        });
+    </script>
+}
