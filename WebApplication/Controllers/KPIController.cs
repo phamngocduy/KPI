@@ -48,7 +48,6 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(KPI model, string[] emails)
         {
-            var KPI = db.KPIs.Find(model.idKPI);
             emails = emails ?? new string[] { User.Identity.Name.Split('@')[0] };
             if (ModelState.IsValid)
             using (var scope = new TransactionScope())
@@ -59,9 +58,9 @@ namespace WebApplication.Controllers
                         Email = email,
                         idKPI = model.idKPI,
                         MucTieu = model.MucTieu,
-                        DonViTinh = model.DonViTinh,
-                        ChiTieu = (int)(model.ChiTieu / (float)emails.Length),
-                        TyTrong = (int)(model.TyTrong / (float)emails.Length),
+                        TyTrong = model.TyTrong,
+                        ChiTieu = model.ChiTieu,
+                        DonViTinh = model.DonViTinh
                     });
                 db.SaveChanges();
                 scope.Complete();
