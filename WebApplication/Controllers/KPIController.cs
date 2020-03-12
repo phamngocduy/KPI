@@ -131,6 +131,29 @@ namespace WebApplication.Controllers
             return View(db.KPIs.ToList());
         }
 
+        public ActionResult Index2(string email)
+        {
+            var model = db.KPIs.FirstOrDefault(kpi => kpi.id == kpi.idKPI);
+            if (!String.IsNullOrEmpty(email))
+            {
+                var KPIs = new List<KPI>();
+                foreach (var item in db.KPIs.Where(kpi => kpi.Email == email))
+                {
+                    var temp = item;
+                    while (temp.id != temp.idKPI)
+                    {
+                        KPIs.Add(temp);
+                        temp = temp.KP1;
+                    }
+                }
+                KPIs.Add(model);
+                ViewBag.KPIs = KPIs.Distinct();
+            }
+            else
+                ViewBag.KPIs = db.KPIs.ToList();
+            return View(model);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

@@ -35,7 +35,9 @@
     {
         <tr>
             <th scope="row">@(index++)</th>
-            <td>@@@item.Key</td>
+            <td>
+                <a href="@Url.Action("Index2", new { email = item.Key })">@@@item.Key</a>
+            </td>
             <td>@((double)item.Value * 100)%</td>
             <td>@(index != 1 ? (100f / (Names.Length - 1)).ToString() + "%" : "")</td>
         </tr>

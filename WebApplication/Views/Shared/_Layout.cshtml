@@ -21,8 +21,8 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
-                    <li>@Html.ActionLink("About", "About", "Home")</li>
+                    <li>@Html.ActionLink("K.CNTT", "Index2", "KPI")</li>
+                    <li>@Html.ActionLink("My KPIs", "Index2", "KPI", new { email = User.Identity.Name.Split('@')[0] }, null)</li>
                     <li>@Html.ActionLink("Statistics", "Statistics", "KPI")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")

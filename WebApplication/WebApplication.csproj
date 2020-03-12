@@ -226,6 +226,7 @@
       <DependentUpon>Models.edmx</DependentUpon>
       <LastGenOutput>Models.cs</LastGenOutput>
     </Content>
+    <Content Include="Scripts\bootstrap-treeview.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <EntityDeploy Include="Models\Models.edmx">
@@ -288,6 +289,7 @@
     <Content Include="Views\KPI\Index.cshtml" />
     <Content Include="Views\KPI\Update.cshtml" />
     <Content Include="Views\KPI\Statistics.cshtml" />
+    <Content Include="Views\KPI\Index2.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

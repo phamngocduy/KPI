@@ -29,7 +29,7 @@
             @item.Email
         </td>
         <td>
-            @item.KPIs.Except(new KPI[] { item }).Sum(kpi => kpi.TyTrong)
+            @item.KPIs.Except(new KPI[] { item }).Sum(kpi => kpi.TyTrong)%
         </td>
     </tr>
 }

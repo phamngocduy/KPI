@@ -47,7 +47,7 @@ else
             @Html.ActionLink(item.MucTieu, "Details", new { id = -item.id })
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TyTrong)% (@item.KPIs.Count)
+            <b>@Html.DisplayFor(modelItem => item.TyTrong)%</b> (<i>@item.KPIs.Count</i>)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.ChiTieu)
@@ -70,7 +70,7 @@ else
     </tr>
 }
     <tr>
-        <td>Tổng cộng</td>
-        <td>@Model.Sum(kpi => kpi.TyTrong)%</td>
+        <th>Tổng cộng</th>
+        <th><u>@Model.Sum(kpi => kpi.TyTrong)%</u></th>
     </tr>
 </table>

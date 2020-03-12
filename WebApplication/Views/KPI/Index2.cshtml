@@ -1,0 +1,100 @@
+﻿@model KPI
+@{
+    var KPIs = ViewBag.KPIs as IEnumerable<KPI>;
+}
+
+@functions 
+{
+    double Product(KPI item)
+    {
+        var ratio = item.TyTrong / 100f;
+        while (item.id != item.idKPI)
+        {
+            ratio = ratio * item.KP1.TyTrong / 100;
+            item = item.KP1;
+        }
+        return ratio;
+    }
+}
+
+@helper Display(KPI item, IEnumerable<KPI> KPIs)
+{
+    if (item.KPIs.Count(kpi => kpi.id != kpi.idKPI) > 0)
+    {
+        <li>
+            <span>
+                <span class="care1 care1-down"></span>
+                <a href="@Url.Action("Details", new { id = -item.id })" target="_blank">@item.MucTieu</a>
+                <span>(@Math.Round(Product(item) * 100, 2)%)</span>
+            </span>
+            <ul class="nested active">
+            @foreach (var kpi in item.KPIs.OrderBy(i => i.MucTieu))
+            {
+                if (kpi.id != kpi.idKPI && KPIs.Count(i => i.id == kpi.id) > 0)
+                {
+                    @Display(KPIs.SingleOrDefault(i => i.id == kpi.id), KPIs)
+                }
+            }
+            </ul>
+        </li>
+    }
+    else
+    {
+        <li>@item.MucTieu <span>(@Math.Round(Product(item) * 100, 2)%)</span></li>
+    }
+}
+
+<br />
+<ul id="myUL">
+    @Display(Model, KPIs)
+</ul>
+
+<style>
+    ul, #myUL {
+        list-style-type: none;
+    }
+
+    #myUL {
+        margin: 0;
+        padding: 0;
+    }
+
+    .care1 {
+        cursor: pointer;
+        -webkit-user-select: none; /* Safari 3.1+ */
+        -moz-user-select: none; /* Firefox 2+ */
+        -ms-user-select: none; /* IE 10+ */
+        user-select: none;
+    }
+
+    .care1::before {
+        content: "\25B6";
+        color: black;
+        display: inline-block;
+        margin-right: 6px;
+    }
+
+    .care1-down::before {
+        -ms-transform: rotate(90deg); /* IE 9 */
+        -webkit-transform: rotate(90deg); /* Safari */
+        transform: rotate(90deg);
+    }
+
+    .nested {
+        display: none;
+    }
+
+    .active {
+        display: block;
+    }
+</style>
+
+<script>
+    var toggler = document.getElementsByClassName('care1');
+    for (var i = 0; i < toggler.length; i++) {
+        toggler[i].addEventListener('click', function () {
+            this.parentElement.parentElement.querySelector('.nested').classList.toggle('active');
+            this.classList.toggle('care1-down');
+        });
+    }
+</script>
