@@ -17,9 +17,12 @@ namespace WebApplication.Controllers
         private KPIEntities db = new KPIEntities();
 
         // GET: KPI
-        public ActionResult Index()
+        public ActionResult Index(bool check = false)
         {
             var model = db.KPIs.Where(kpi => kpi.idKPI == kpi.id);
+            if (check)
+                model = db.KPIs.Where(kpi => kpi.KPIs.Count() > 0 &&
+                    kpi.KPIs.Sum(i => i.TyTrong) > 0 && kpi.KPIs.Sum(i => i.TyTrong) != 100);
             return View(model.ToList());
         }
 
@@ -120,6 +123,12 @@ namespace WebApplication.Controllers
             db.KPIs.Remove(model);
             db.SaveChanges();
             return RedirectToAction("Details", new { id = -model.idKPI });
+        }
+
+        public ActionResult Statistics()
+        {
+            ViewBag.Names = db.KpiUsers.First().Names;
+            return View(db.KPIs.ToList());
         }
 
         protected override void Dispose(bool disposing)

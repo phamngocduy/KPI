@@ -43,7 +43,7 @@
     <div class="col-md-10">
         @if (ViewBag.Names is SelectList)
         {
-            @Html.DropDownList("Email", ViewBag.Names as SelectList, "Current user or...", new { @class = "form-control" })
+            @Html.DropDownList("Email", ViewBag.Names as SelectList, new { @class = "form-control" })
         }
         else
         {

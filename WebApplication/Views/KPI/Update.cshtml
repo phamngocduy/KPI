@@ -1,7 +1,8 @@
 ﻿@model KPI
 @{
     ViewBag.Title = "Update";
-    ViewBag.Names = new SelectList((ViewBag.Names as string).Split(',').Skip(1).OrderBy(s => s.Split(' ').Last())
+    ViewBag.Names = new SelectList((ViewBag.Names as string).Split(',').Take(1).Concat(
+            (ViewBag.Names as string).Split(',').Skip(1).OrderBy(s => s.Split(' ').Last()))
         .Select(s => new { Value = s.Replace(" ", "").ToLower(), Text = s }), "Value", "Text", Model.Email.Split('@')[0]);
 }
 

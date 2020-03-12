@@ -5,13 +5,18 @@
 
 <h2>Index</h2>
 
+@Html.ActionLink("Check", "Index", new { check = true }, new { style = "float:right" })
+
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.MucTieu)
+            Mục tiêu
         </th>
         <th>
-            DonVi
+            Owner
+        </th>
+        <th>
+            Tổng cộng
         </th>
     </tr>
 
@@ -22,6 +27,9 @@
         </td>
         <td>
             @item.Email
+        </td>
+        <td>
+            @item.KPIs.Except(new KPI[] { item }).Sum(kpi => kpi.TyTrong)
         </td>
     </tr>
 }

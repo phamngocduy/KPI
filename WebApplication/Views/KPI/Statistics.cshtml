@@ -1,0 +1,44 @@
+﻿@using System.Collections
+@model IEnumerable<KPI>
+@{
+    ViewBag.Title = "Statistics";
+    var Names = (ViewBag.Names as string).Split(',');
+    var Hashtable = new Hashtable();
+    Names.ToList().ForEach(name => Hashtable[name.Replace(" ", "").ToLower()] = 0.0);
+    foreach (var item in Model)
+    {
+        var ratio = item.KPIs.Count == 0 ? 1.0 : 0;
+        var temp = item;
+        while (temp != temp.KP1)
+        {
+            ratio = ratio * temp.TyTrong / 100;
+            temp = temp.KP1;
+        }
+        Hashtable[item.Email] = (double)Hashtable[item.Email] + ratio;
+    }
+    var index = 0;
+}
+
+<h2>Statistics</h2>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Email</th>
+            <th scope="col">Tỷ trọng</th>
+            <th>Avg.</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Hashtable.Cast<DictionaryEntry>().OrderByDescending(entry => entry.Value).ToList())
+    {
+        <tr>
+            <th scope="row">@(index++)</th>
+            <td>@@@item.Key</td>
+            <td>@((double)item.Value * 100)%</td>
+            <td>@(index != 1 ? (100f / (Names.Length - 1)).ToString() + "%" : "")</td>
+        </tr>
+    }
+    </tbody>
+</table>
