@@ -2,6 +2,7 @@
 @{
     ViewBag.Title = "Index";
     var KPI = ViewBag.KPI as KPI;
+    var user = User.Identity.Name.Split('@')[0];
 }
 
 <h2>BẢNG PHÂN BỔ KPI NĂM HỌC 2019-2020</h2>
@@ -29,7 +30,10 @@ else
 <span class="badge">Đơn vị tính: @KPI.DonViTinh</span>
 
 <p>
-    @Html.ActionLink("Create New", "Create", new { id = -KPI.id }, new { style = "float:right" })
+    @if (KPI.Email == user)
+    {
+        @Html.ActionLink("Create New", "Create", new { id = -KPI.id }, new { style = "float:right" })
+    }
 </p>
 <table class="table">
     <tr>
@@ -45,6 +49,10 @@ else
     <tr>
         <td>
             @Html.ActionLink(item.MucTieu, "Details", new { id = -item.id })
+            @if (!String.IsNullOrEmpty(item.GhiChu))
+            {
+                <pre>@item.GhiChu</pre>
+            }
         </td>
         <td>
             <b>@Html.DisplayFor(modelItem => item.TyTrong)%</b> (<i>@item.KPIs.Count</i>)
@@ -59,13 +67,16 @@ else
             @item.Email
         </td>
         <td>
-            <a href="@Url.Action("Update", new { id = -item.id })" class="text-success">
-                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
-            </a>
-            <span>&nbsp;</span>
-            <a href="@Url.Action("Delete", new { id = -item.id })" class="text-danger">
-                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-            </a>
+            @if (KPI.Email == user || item.Email == user)
+            {
+                <a href="@Url.Action("Update", new { id = -item.id })" class="text-success">
+                    <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+                </a>
+                <span>&nbsp;</span>
+                <a href="@Url.Action("Delete", new { id = -item.id })" class="text-danger">
+                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                </a>
+            }
         </td>
     </tr>
 }

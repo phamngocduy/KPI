@@ -51,7 +51,10 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create(KPI model, string[] emails)
         {
-            emails = emails ?? new string[] { User.Identity.Name.Split('@')[0] };
+            var user = User.Identity.Name.Split('@')[0];
+            if (db.KPIs.Find(model.idKPI).Email != user)
+                return HttpNotFound();
+            emails = emails ?? new string[] { user };
             if (ModelState.IsValid)
             using (var scope = new TransactionScope())
             {
@@ -63,7 +66,8 @@ namespace WebApplication.Controllers
                         MucTieu = model.MucTieu,
                         TyTrong = model.TyTrong,
                         ChiTieu = model.ChiTieu,
-                        DonViTinh = model.DonViTinh
+                        DonViTinh = model.DonViTinh,
+                        GhiChu = model.GhiChu
                     });
                 db.SaveChanges();
                 scope.Complete();
@@ -92,12 +96,16 @@ namespace WebApplication.Controllers
             model.id = model.id > 0 ? -model.id : model.id;
             if (ModelState.IsValid)
             {
+                var user = User.Identity.Name.Split('@')[0];
                 var KPI = db.KPIs.Find(model.id);
+                if (KPI.Email != user && KPI.KP1.Email != user)
+                    return HttpNotFound();
                 KPI.MucTieu = model.MucTieu;
                 KPI.TyTrong = model.TyTrong;
                 KPI.ChiTieu = model.ChiTieu;
                 KPI.DonViTinh = model.DonViTinh;
-                KPI.Email = model.Email ?? User.Identity.Name.Split('@')[0];
+                KPI.GhiChu = model.GhiChu;
+                KPI.Email = model.Email ?? user;
 
                 db.Entry(KPI).State = EntityState.Modified;
                 db.SaveChanges();
@@ -119,7 +127,10 @@ namespace WebApplication.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+            var user = User.Identity.Name.Split('@')[0];
             var model = db.KPIs.Find(-id);
+            if (model.Email != user && model.KP1.Email != user)
+                return HttpNotFound();
             db.KPIs.Remove(model);
             db.SaveChanges();
             return RedirectToAction("Details", new { id = -model.idKPI });

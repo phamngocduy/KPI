@@ -25,7 +25,7 @@
             <span>
                 <span class="care1 care1-down"></span>
                 <a href="@Url.Action("Details", new { id = -item.id })" target="_blank">@item.MucTieu</a>
-                <span>(@Math.Round(Product(item) * 100, 2)%)</span>
+                <span>(@Math.Round(Product(item) * 100, 2)%)</span> - <i>@(item.ChiTieu > 0 ? String.Format("{0} {1}", item.ChiTieu, item.DonViTinh) : null) @item.GhiChu</i>
             </span>
             <ul class="nested active">
             @foreach (var kpi in item.KPIs.OrderBy(i => i.MucTieu))
@@ -40,7 +40,10 @@
     }
     else
     {
-        <li>@item.MucTieu <span>(@Math.Round(Product(item) * 100, 2)%)</span></li>
+        <li>
+            <span class="care1 care1-down" style="visibility:collapse"></span>
+            @item.MucTieu <span>(@Math.Round(Product(item) * 100, 2)%)</span> - <i>@(item.ChiTieu > 0 ? String.Format("{0} {1}", item.ChiTieu, item.DonViTinh) : null) @item.GhiChu</i>
+        </li>
     }
 }
 
