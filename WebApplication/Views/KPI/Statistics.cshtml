@@ -3,8 +3,9 @@
 @{
     ViewBag.Title = "Statistics";
     var Names = (ViewBag.Names as string).Split(',');
-    var Hashtable = new Hashtable();
-    Names.ToList().ForEach(name => Hashtable[name.Replace(" ", "").ToLower()] = 0.0);
+    var Task = new Hashtable(); var Done = new Hashtable();
+    Names.ToList().ForEach(name => Task[name.Replace(" ", "").ToLower()] = 0.0);
+    Task.Keys.Cast<string>().ToList().ForEach(key => Done[key] = 0.0);
     foreach (var item in Model)
     {
         var ratio = item.KPIs.Count == 0 ? 1.0 : 0;
@@ -14,7 +15,11 @@
             ratio = ratio * temp.TyTrong / 100;
             temp = temp.KP1;
         }
-        Hashtable[item.Email] = (double)Hashtable[item.Email] + ratio;
+        Task[item.Email] = (double)Task[item.Email] + ratio;
+        if (item.ChiTieu > 0 && item.KetQua > 0)
+        {
+            Done[item.Email] = (double)Done[item.Email] + (item.KetQua / (float)item.ChiTieu) * ratio;
+        }
     }
     var index = 0;
 }
@@ -27,11 +32,12 @@
             <th scope="col">#</th>
             <th scope="col">Email</th>
             <th scope="col">Tỷ trọng</th>
-            <th>Avg.</th>
+            <th scope="col">Kết quả</th>
+            <th>Total</th>
         </tr>
     </thead>
     <tbody>
-    @foreach (var item in Hashtable.Cast<DictionaryEntry>().OrderByDescending(entry => entry.Value).ToList())
+    @foreach (var item in Task.Cast<DictionaryEntry>().OrderByDescending(entry => entry.Value).ToList())
     {
         <tr>
             <th scope="row">@(index++)</th>
@@ -39,8 +45,19 @@
                 <a href="@Url.Action("Index2", new { email = item.Key })">@@@item.Key</a>
             </td>
             <td>@((double)item.Value * 100)%</td>
-            <td>@(index != 1 ? (100f / (Names.Length - 1)).ToString() + "%" : "")</td>
+            <td>@((double)Done[item.Key] * 100)%</td>
+            <td>@Math.Round((double)item.Value > 0 ? (double)Done[item.Key] / (double)item.Value * 100 : 0, 0)%</td>
+            <!--td>@(index != 1 ? (100f / (Names.Length - 1)).ToString() + "%" : "")</td-->
         </tr>
     }
+        <tr>
+            <td colspan="2"></td>
+            <td>
+                @(Task.Cast<DictionaryEntry>().Sum(item => (double)item.Value) * 100)%
+            </td>
+            <td>
+                @(Done.Cast<DictionaryEntry>().Sum(item => (double)item.Value) * 100)%
+            </td>
+        </tr>
     </tbody>
 </table>

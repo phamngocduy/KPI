@@ -42,6 +42,7 @@ else
         <th>Chỉ tiêu</th>
         <th>Đơn vị tính</th>
         <th>Owner</th>
+        <th>Done</th>
         <th></th>
     </tr>
 @foreach (var item in Model.OrderBy(kpi => kpi.MucTieu))
@@ -69,13 +70,34 @@ else
         <td>
             @if (KPI.Email == user || item.Email == user)
             {
-                <a href="@Url.Action("Update", new { id = -item.id })" class="text-success">
+                <a href="@Url.Action("Finish", new { id = -item.id })" style="text-decoration:underline">
+                    @item.KetQua
+                </a>
+            }
+            else
+            {
+                <span>@(item.KetQua > 0 ? item.KetQua.ToString() : "")</span>
+            }
+            @if (item.KetQua > 0)
+            {
+                <abbr class="pull-right" title="@item.GhiChu2">
+                    <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+                </abbr>
+            }
+        </td>
+        <td style="text-align:right">
+            @if (KPI.Email == user || item.Email == user)
+            {
+                <a href="@Url.Action("Update", new { id = -item.id })" class="text-primary">
                     <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
                 </a>
-                <span>&nbsp;</span>
-                <a href="@Url.Action("Delete", new { id = -item.id })" class="text-danger">
-                    <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-                </a>
+                if (KPI.Email == user)
+                {
+                    <span>&nbsp;</span>
+                    <a href="@Url.Action("Delete", new { id = -item.id })" class="text-danger">
+                        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                    </a>
+                }
             }
         </td>
     </tr>

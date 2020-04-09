@@ -29,6 +29,7 @@ namespace WebApplication.Models
         public string GhiChu { get; set; }
         public string Email { get; set; }
         public int idKPI { get; set; }
+        public string GhiChu2 { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<KPI> KPIs { get; set; }

@@ -129,7 +129,7 @@ namespace WebApplication.Controllers
         {
             var user = User.Identity.Name.Split('@')[0];
             var model = db.KPIs.Find(-id);
-            if (model.Email != user && model.KP1.Email != user)
+            if (model.KP1.Email != user)
                 return HttpNotFound();
             db.KPIs.Remove(model);
             db.SaveChanges();
@@ -163,6 +163,35 @@ namespace WebApplication.Controllers
             else
                 ViewBag.KPIs = db.KPIs.ToList();
             return View(model);
+        }
+
+        public ActionResult Finish(int id)
+        {
+            ViewBag.Names = db.KpiUsers.First().Names;
+            return View(db.KPIs.Find(-id));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Finish(KPI model)
+        {
+            model.id = model.id > 0 ? -model.id : model.id;
+            if (ModelState.IsValid)
+            {
+                var user = User.Identity.Name.Split('@')[0];
+                var KPI = db.KPIs.Find(model.id);
+                if (KPI.Email != user && KPI.KP1.Email != user)
+                    return HttpNotFound();
+                KPI.KetQua = model.KetQua;
+                KPI.GhiChu2 = model.GhiChu2;
+
+                db.Entry(KPI).State = EntityState.Modified;
+                db.SaveChanges();
+                return RedirectToAction("Details", new { id = -KPI.idKPI });
+            }
+
+            ViewBag.Names = db.KpiUsers.First().Names;
+            return View(db.KPIs.Find(model.id));
         }
 
         protected override void Dispose(bool disposing)

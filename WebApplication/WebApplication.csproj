@@ -291,6 +291,7 @@
     <Content Include="Views\KPI\Update.cshtml" />
     <Content Include="Views\KPI\Statistics.cshtml" />
     <Content Include="Views\KPI\Index2.cshtml" />
+    <Content Include="Views\KPI\Finish.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

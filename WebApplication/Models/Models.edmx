@@ -18,6 +18,7 @@
           <Property Name="GhiChu" Type="nvarchar(max)" />
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="idKPI" Type="int" Nullable="false" />
+          <Property Name="GhiChu2" Type="nvarchar(max)" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -55,25 +56,40 @@ warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key 
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="KPIModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="KPIEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="KpiUsers" EntityType="KPIModels.KpiUser" />
+          <EntitySet Name="KPIs" EntityType="KPIModels.KPI" />
+          <AssociationSet Name="FK__KPI__idKPI__51300E55" Association="KPIModels.FK__KPI__idKPI__51300E55">
+            <End Role="KPI" EntitySet="KPIs" />
+            <End Role="KPI1" EntitySet="KPIs" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="KpiUser">
+          <Key>
+            <PropertyRef Name="Names" />
+          </Key>
+          <Property Name="Names" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
         <EntityType Name="KPI">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="MucTieu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="MucTieu" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ChiTieu" Type="Int32" Nullable="false" />
           <Property Name="DonViTinh" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TyTrong" Type="Int32" Nullable="false" />
           <Property Name="KetQua" Type="Int32" Nullable="false" />
           <Property Name="GhiChu" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="idKPI" Type="Int32" Nullable="false" />
-          <NavigationProperty Name="KPIs" Relationship="Self.FK__KPI__idKPI__51300E55" FromRole="KPI" ToRole="KPI1" />
-          <NavigationProperty Name="KP1" Relationship="Self.FK__KPI__idKPI__51300E55" FromRole="KPI1" ToRole="KPI" />
+          <Property Name="GhiChu2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="KPIs" Relationship="KPIModels.FK__KPI__idKPI__51300E55" FromRole="KPI" ToRole="KPI1" />
+          <NavigationProperty Name="KP1" Relationship="KPIModels.FK__KPI__idKPI__51300E55" FromRole="KPI1" ToRole="KPI" />
         </EntityType>
         <Association Name="FK__KPI__idKPI__51300E55">
-          <End Role="KPI" Type="Self.KPI" Multiplicity="1" />
-          <End Role="KPI1" Type="Self.KPI" Multiplicity="*" />
+          <End Type="KPIModels.KPI" Role="KPI" Multiplicity="1" />
+          <End Type="KPIModels.KPI" Role="KPI1" Multiplicity="*" />
           <ReferentialConstraint>
             <Principal Role="KPI">
               <PropertyRef Name="id" />
@@ -83,45 +99,32 @@ warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key 
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="KPIEntities" annotation:LazyLoadingEnabled="true">
-          <EntitySet Name="KPIs" EntityType="Self.KPI" />
-          <AssociationSet Name="FK__KPI__idKPI__51300E55" Association="Self.FK__KPI__idKPI__51300E55">
-            <End Role="KPI" EntitySet="KPIs" />
-            <End Role="KPI1" EntitySet="KPIs" />
-          </AssociationSet>
-          <EntitySet Name="KpiUsers" EntityType="KPIModels.KpiUser" />
-        </EntityContainer>
-        <EntityType Name="KpiUser">
-          <Key>
-            <PropertyRef Name="Names" />
-          </Key>
-          <Property Name="Names" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
-        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
         <EntityContainerMapping StorageEntityContainer="KPIModelsStoreContainer" CdmEntityContainer="KPIEntities">
-          <EntitySetMapping Name="KPIs">
-            <EntityTypeMapping TypeName="KPIModels.KPI">
-              <MappingFragment StoreEntitySet="KPI">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="MucTieu" ColumnName="MucTieu" />
-                <ScalarProperty Name="ChiTieu" ColumnName="ChiTieu" />
-                <ScalarProperty Name="DonViTinh" ColumnName="DonViTinh" />
-                <ScalarProperty Name="TyTrong" ColumnName="TyTrong" />
-                <ScalarProperty Name="KetQua" ColumnName="KetQua" />
-                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
-                <ScalarProperty Name="Email" ColumnName="Email" />
-                <ScalarProperty Name="idKPI" ColumnName="idKPI" />
-              </MappingFragment>
-            </EntityTypeMapping>
-          </EntitySetMapping>
           <EntitySetMapping Name="KpiUsers">
             <EntityTypeMapping TypeName="KPIModels.KpiUser">
               <MappingFragment StoreEntitySet="KpiUser">
                 <ScalarProperty Name="Names" ColumnName="Names" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="KPIs">
+            <EntityTypeMapping TypeName="KPIModels.KPI">
+              <MappingFragment StoreEntitySet="KPI">
+                <ScalarProperty Name="GhiChu2" ColumnName="GhiChu2" />
+                <ScalarProperty Name="idKPI" ColumnName="idKPI" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="GhiChu" ColumnName="GhiChu" />
+                <ScalarProperty Name="KetQua" ColumnName="KetQua" />
+                <ScalarProperty Name="TyTrong" ColumnName="TyTrong" />
+                <ScalarProperty Name="DonViTinh" ColumnName="DonViTinh" />
+                <ScalarProperty Name="ChiTieu" ColumnName="ChiTieu" />
+                <ScalarProperty Name="MucTieu" ColumnName="MucTieu" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

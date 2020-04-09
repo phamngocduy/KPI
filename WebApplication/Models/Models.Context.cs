@@ -25,7 +25,7 @@ namespace WebApplication.Models
             throw new UnintentionalCodeFirstException();
         }
     
-        public virtual DbSet<KPI> KPIs { get; set; }
         public virtual DbSet<KpiUser> KpiUsers { get; set; }
+        public virtual DbSet<KPI> KPIs { get; set; }
     }
 }

@@ -5,9 +5,9 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="31fe8e596be9412591b8044c1919b1dd" Name="Diagram1">
-        <EntityTypeShape EntityType="KPIModels.KPI" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
-        <AssociationConnector Association="KPIModels.FK__KPI__idKPI__51300E55" ManuallyRouted="false" />
         <EntityTypeShape EntityType="KPIModels.KpiUser" Width="1.5" PointX="3.375" PointY="0.75" />
+        <EntityTypeShape EntityType="KPIModels.KPI" Width="1.5" PointX="0.75" PointY="0.75" />
+        <AssociationConnector Association="KPIModels.FK__KPI__idKPI__51300E55" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>
