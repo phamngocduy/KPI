@@ -21,9 +21,9 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("K.CNTT", "Index2", "KPI")</li>
-                    <li>@Html.ActionLink("My KPIs", "Index2", "KPI", new { email = User.Identity.Name.Split('@')[0] }, null)</li>
-                    <li>@Html.ActionLink("Statistics", "Statistics", "KPI")</li>
+                    <li>@Html.ActionLink("KPI toàn khoa", "Index2", "KPI")</li>
+                    <li>@Html.ActionLink("KPI của tôi", "Index2", "KPI", new { email = User.Identity.Name.Split('@')[0] }, null)</li>
+                    <li>@Html.ActionLink("Bảng thống kê", "Statistics", "KPI")</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>
@@ -33,7 +33,7 @@
         @RenderBody()
         <hr />
         <footer>
-            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+            <em>&copy;ACDM @DateTime.Now.Year - Khoa Công nghệ thông tin</em>
         </footer>
     </div>
 

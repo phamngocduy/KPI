@@ -47,7 +47,7 @@
 </div>
 
 <div class="form-group">
-    @Html.LabelFor(model => model.Email, "Owner", htmlAttributes: new { @class = "control-label col-md-2" })
+    @Html.LabelFor(model => model.Email, "Giao cho", htmlAttributes: new { @class = "control-label col-md-2" })
     <div class="col-md-10">
         @if (ViewBag.Names is SelectList)
         {
@@ -69,7 +69,7 @@
         document.addEventListener('DOMContentLoaded', function (event) {
             //$('#TyTrong').attr('readonly', true);
             $('#ChiTieu').keyup(function () {
-                $('#TyTrong').val(Math.round($(this).val() * 100 / chiTieu));
+                //$('#TyTrong').val(Math.round($(this).val() * 100 / chiTieu));
             });
         });
     </script>

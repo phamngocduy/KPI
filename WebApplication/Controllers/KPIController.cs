@@ -20,9 +20,10 @@ namespace WebApplication.Controllers
         public ActionResult Index(bool check = false)
         {
             var model = db.KPIs.Where(kpi => kpi.idKPI == kpi.id);
-            if (check)
+            if (check == true)
                 model = db.KPIs.Where(kpi => kpi.KPIs.Count() > 0 &&
-                    kpi.KPIs.Sum(i => i.TyTrong) > 0 && kpi.KPIs.Sum(i => i.TyTrong) != 100);
+                kpi.KPIs.Sum(i => i.TyTrong) > 0 && kpi.KPIs.Sum(i => i.TyTrong) != 100
+                    && kpi.idKPI != kpi.id);
             return View(model.ToList());
         }
 

@@ -5,8 +5,14 @@
     var user = User.Identity.Name.Split('@')[0];
 }
 
-<h2>BẢNG PHÂN BỔ KPI NĂM HỌC 2019-2020</h2>
+@functions {
+    double Progress(KPI kpi)
+    {
+        return kpi.KetQua > 0 ? 100 : kpi.KPIs.Sum(i => Progress(i) * i.TyTrong) / 100f;
+    }
+}
 
+<br />
 <ul class="breadcrumb" style="margin-bottom:0">
 @if (KPI != KPI.KP1)
 {
@@ -15,7 +21,7 @@
 }
 else
 {
-    <li>@KPI.MucTieu</li>
+    <li><b>@KPI.MucTieu</b></li>
     KPI = null;
 }
 @while (KPI != null)
@@ -26,23 +32,24 @@ else
 </ul>
 
 @{ KPI = ViewBag.KPI as KPI; }
-<span class="badge">Chỉ tiêu: @KPI.ChiTieu</span>
-<span class="badge">Đơn vị tính: @KPI.DonViTinh</span>
+<span><b>@KPI.MucTieu</b></span>
+<span class="badge">Chỉ tiêu: @KPI.ChiTieu @KPI.DonViTinh</span>
+<span>@@@KPI.Email</span>
 
 <p>
     @if (KPI.Email == user)
     {
-        @Html.ActionLink("Create New", "Create", new { id = -KPI.id }, new { style = "float:right" })
+        <b>@Html.ActionLink("Thêm nhiệm vụ", "Create", new { id = -KPI.id }, new { style = "float:right" })</b>
     }
 </p>
-<table class="table">
+<table class="table table-bordered table-hover table-striped">
     <tr>
-        <th>Mục tiêu</th>
+        <th>Mục tiêu / nhiệm vụ</th>
         <th>Tỷ trọng</th>
         <th>Chỉ tiêu</th>
-        <th>Đơn vị tính</th>
-        <th>Owner</th>
-        <th>Done</th>
+        <th>Kết quả</th>
+        <th>Tiến độ</th>
+        <th>Phụ trách</th>
         <th></th>
     </tr>
 @foreach (var item in Model.OrderBy(kpi => kpi.MucTieu))
@@ -59,13 +66,7 @@ else
             <b>@Html.DisplayFor(modelItem => item.TyTrong)%</b> (<i>@item.KPIs.Count</i>)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ChiTieu)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.DonViTinh)
-        </td>
-        <td>
-            @item.Email
+            @item.ChiTieu @item.DonViTinh
         </td>
         <td>
             @if (KPI.Email == user || item.Email == user)
@@ -84,6 +85,17 @@ else
                     <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
                 </abbr>
             }
+        </td>
+        <td style="padding-left:0;padding-right:0">
+            @{ var progress = Math.Round(Progress(item), 0); }
+            <div class="progress" style="margin-bottom:0">
+                <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:@progress%">
+                    <span style="color:black">@progress%</span>
+                </div>
+            </div>
+        </td>
+        <td>
+            <span class="badge">@item.Email</span>
         </td>
         <td style="text-align:right">
             @if (KPI.Email == user || item.Email == user)

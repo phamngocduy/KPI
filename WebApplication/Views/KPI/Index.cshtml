@@ -3,35 +3,70 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+@functions {
+    double Progress(KPI kpi)
+    {
+        return kpi.KetQua > 0 ? 100 :
+            kpi.KPIs.Except(new KPI[] { kpi }).Sum(i => Progress(i) * i.TyTrong) / 100f;
+    }
+    double Result(KPI kpi)
+    {
+        return kpi.ChiTieu > 0 ? kpi.KetQua * 100f / kpi.ChiTieu :
+            kpi.KPIs.Except(new KPI[] { kpi }).Sum(i => Result(i) / 100f * i.TyTrong);
+    }
+}
 
-@Html.ActionLink("Check", "Index", new { check = true }, new { style = "float:right" })
+<h2>KPI của Khoa Công nghệ thông tin</h2>
 
-<table class="table">
+@if (Request.QueryString["Check"] == true.ToString())
+{
+    <a href="@Url.Action("Index")" style="float:right">Bỏ lọc</a>
+}
+else
+{
+    <a href="@Url.Action("Index", new { check = true })" style="float:right">
+        <i>Lọc tỷ trọng ≠ 100%</i>
+    </a>
+}
+
+<table class="table table-bordered table-hover table-striped">
     <tr>
         <th>
-            Mục tiêu
+            Mục tiêu / nhiệm vụ
         </th>
         <th>
-            Owner
+            Phụ trách
         </th>
         <th>
             Tổng cộng
         </th>
+        <th>
+            Tiến độ
+        </th>
+        <th>
+            Kết quả
+        </th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.ActionLink(item.MucTieu, "Details", new { id = -item.id })
-        </td>
-        <td>
-            @item.Email
-        </td>
-        <td>
-            @item.KPIs.Except(new KPI[] { item }).Sum(kpi => kpi.TyTrong)%
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <b>@Html.ActionLink(item.MucTieu, "Details", new { id = -item.id })</b>
+            </td>
+            <td>
+                @item.Email
+            </td>
+            <td>
+                @item.KPIs.Except(new KPI[] { item }).Sum(kpi => kpi.TyTrong)%
+            </td>
+            <td>
+                @Math.Round(Progress(item), 2)%
+            </td>
+            <td>
+                @Math.Round(Result(item), 2)%
+            </td>
+        </tr>
+    }
 
 </table>

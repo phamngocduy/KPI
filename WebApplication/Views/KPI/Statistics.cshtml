@@ -24,16 +24,16 @@
     var index = 0;
 }
 
-<h2>Statistics</h2>
+<h2>Thống kê chung</h2>
 
-<table class="table table-striped">
+<table class="table table-bordered table-hover table-striped">
     <thead>
         <tr>
             <th scope="col">#</th>
-            <th scope="col">Email</th>
-            <th scope="col">Tỷ trọng</th>
-            <th scope="col">Kết quả</th>
-            <th>Total</th>
+            <th scope="col">Email thành viên</th>
+            <th scope="col" style="text-align:center">Tỷ trọng trong Khoa</th>
+            <th scope="col" style="text-align:center">Tỷ trọng trung bình</th>
+            <th scope="col" style="text-align:center">Tiến độ thực hiện</th>
         </tr>
     </thead>
     <tbody>
@@ -44,19 +44,27 @@
             <td>
                 <a href="@Url.Action("Index2", new { email = item.Key })">@@@item.Key</a>
             </td>
-            <td>@((double)item.Value * 100)%</td>
-            <td>@((double)Done[item.Key] * 100)%</td>
-            <td>@Math.Round((double)item.Value > 0 ? (double)Done[item.Key] / (double)item.Value * 100 : 0, 0)%</td>
-            <!--td>@(index != 1 ? (100f / (Names.Length - 1)).ToString() + "%" : "")</td-->
+            <td style="text-align:center">@Math.Round((double)item.Value * 100, 2)%</td>
+            @if (index > 1)
+            {
+                var progress = @Math.Round((double)item.Value > 0 ? (double)Done[item.Key] / (double)item.Value * 100 : 0, 0);
+                <td style="text-align:center">@Math.Round((double)item.Value * 100 * (Task.Count - 1), 0)%</td>
+                <!--td>@((double)Done[item.Key] * 100)%</td-->
+                <td>
+                    <div class="progress" style="margin-bottom:0">
+                        <div class="progress-bar progress-bar-info" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width:@progress%">
+                            <span style="color:black">@progress%</span>
+                        </div>
+                    </div>
+                </td>
+                <!--td>@(index != 1 ? (100f / (Names.Length - 1)).ToString() + "%" : "")</td-->
+            }
         </tr>
     }
         <tr>
-            <td colspan="2"></td>
-            <td>
-                @(Task.Cast<DictionaryEntry>().Sum(item => (double)item.Value) * 100)%
-            </td>
-            <td>
-                @(Done.Cast<DictionaryEntry>().Sum(item => (double)item.Value) * 100)%
+            <td colspan="2" style="text-align:center"><b>Tổng cộng</b></td>
+            <td style="text-align:center">
+                <b>@Math.Round(Task.Cast<DictionaryEntry>().Sum(item => (double)item.Value) * 100, 2)%</b>
             </td>
         </tr>
     </tbody>

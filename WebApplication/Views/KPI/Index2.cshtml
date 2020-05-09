@@ -25,7 +25,8 @@
             <span>
                 <span class="care1 care1-down"></span>
                 <a href="@Url.Action("Details", new { id = -item.id })" target="_blank">@item.MucTieu</a>
-                <span>(@Math.Round(Product(item) * 100, 2)%)</span> - <i>@(item.ChiTieu > 0 ? String.Format("{0} {1}", item.ChiTieu, item.DonViTinh) : null) @item.GhiChu</i>
+                <span>(@Math.Round(Product(item) * 100, 2)%)</span> - <i>@(item.ChiTieu > 0 ? String.Format("{0} {1}", item.ChiTieu, item.DonViTinh) : null)
+                <span class="badge" style="@(item.KetQua > 0 ? "background-color:green" : null)">@@@item.Email</span></i>
             </span>
             <ul class="nested active">
             @foreach (var kpi in item.KPIs.OrderBy(i => i.MucTieu))
@@ -42,7 +43,8 @@
     {
         <li>
             <span class="care1 care1-down" style="visibility:collapse"></span>
-            @item.MucTieu <span>(@Math.Round(Product(item) * 100, 2)%)</span> - <i>@(item.ChiTieu > 0 ? String.Format("{0} {1}", item.ChiTieu, item.DonViTinh) : null) @item.GhiChu</i>
+            @item.MucTieu <span>(@Math.Round(Product(item) * 100, 2)%)</span> - <i>@(item.ChiTieu > 0 ? String.Format("{0} {1}", item.ChiTieu, item.DonViTinh) : null)
+            <span class="badge" style="@(item.KetQua > 0 ? "background-color:green" : null)">@@@item.Email</span></i>
         </li>
     }
 }
