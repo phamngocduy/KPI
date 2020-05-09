@@ -19,6 +19,17 @@
           <Property Name="Email" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="idKPI" Type="int" Nullable="false" />
           <Property Name="GhiChu2" Type="nvarchar(max)" />
+          <Property Name="Filename" Type="nvarchar" MaxLength="200" />
+        </EntityType>
+        <EntityType Name="KpiLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="stamp" Type="datetime" Nullable="false" />
+          <Property Name="Email" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Action" Type="nvarchar(max)" Nullable="false" />
+          <Property Name="Content" Type="nvarchar(max)" Nullable="false" />
         </EntityType>
         <!--Errors Found During Generation:
 warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key defined. The key has been inferred and the definition was created as a read-only table/view.-->
@@ -42,6 +53,7 @@ warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key 
         </Association>
         <EntityContainer Name="KPIModelsStoreContainer">
           <EntitySet Name="KPI" EntityType="Self.KPI" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="KpiLog" EntityType="Self.KpiLog" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="KpiUser" EntityType="Self.KpiUser" store:Type="Tables" store:Schema="dbo">
             <DefiningQuery>SELECT 
     [KpiUser].[Names] AS [Names]
@@ -58,6 +70,7 @@ warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key 
       <Schema Namespace="KPIModels" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="KPIEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="KpiUsers" EntityType="KPIModels.KpiUser" />
+          <EntitySet Name="KpiLogs" EntityType="KPIModels.KpiLog" />
           <EntitySet Name="KPIs" EntityType="KPIModels.KPI" />
           <AssociationSet Name="FK__KPI__idKPI__51300E55" Association="KPIModels.FK__KPI__idKPI__51300E55">
             <End Role="KPI" EntitySet="KPIs" />
@@ -69,6 +82,16 @@ warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key 
             <PropertyRef Name="Names" />
           </Key>
           <Property Name="Names" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="KpiLog">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="stamp" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Action" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Content" Type="String" Nullable="false" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="KPI">
           <Key>
@@ -84,6 +107,7 @@ warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key 
           <Property Name="Email" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="idKPI" Type="Int32" Nullable="false" />
           <Property Name="GhiChu2" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Filename" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="KPIs" Relationship="KPIModels.FK__KPI__idKPI__51300E55" FromRole="KPI" ToRole="KPI1" />
           <NavigationProperty Name="KP1" Relationship="KPIModels.FK__KPI__idKPI__51300E55" FromRole="KPI1" ToRole="KPI" />
         </EntityType>
@@ -112,9 +136,21 @@ warning 6002: The table/view 'SoDauBai.dbo.KpiUser' does not have a primary key 
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="KpiLogs">
+            <EntityTypeMapping TypeName="KPIModels.KpiLog">
+              <MappingFragment StoreEntitySet="KpiLog">
+                <ScalarProperty Name="Content" ColumnName="Content" />
+                <ScalarProperty Name="Action" ColumnName="Action" />
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="stamp" ColumnName="stamp" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="KPIs">
             <EntityTypeMapping TypeName="KPIModels.KPI">
               <MappingFragment StoreEntitySet="KPI">
+                <ScalarProperty Name="Filename" ColumnName="Filename" />
                 <ScalarProperty Name="GhiChu2" ColumnName="GhiChu2" />
                 <ScalarProperty Name="idKPI" ColumnName="idKPI" />
                 <ScalarProperty Name="Email" ColumnName="Email" />

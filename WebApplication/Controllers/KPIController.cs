@@ -24,6 +24,7 @@ namespace WebApplication.Controllers
                 model = db.KPIs.Where(kpi => kpi.KPIs.Count() > 0 &&
                 kpi.KPIs.Sum(i => i.TyTrong) > 0 && kpi.KPIs.Sum(i => i.TyTrong) != 100
                     && kpi.idKPI != kpi.id);
+            ViewBag.KpiLogs = db.KpiLogs.ToList();
             return View(model.ToList());
         }
 
@@ -60,6 +61,7 @@ namespace WebApplication.Controllers
             using (var scope = new TransactionScope())
             {
                 foreach (var email in emails)
+                {
                     db.KPIs.Add(new KPI
                     {
                         Email = email,
@@ -70,6 +72,8 @@ namespace WebApplication.Controllers
                         DonViTinh = model.DonViTinh,
                         GhiChu = model.GhiChu
                     });
+                    LogInfo(model);
+                }
                 db.SaveChanges();
                 scope.Complete();
                 return RedirectToAction("Details", new { id = -model.idKPI });
@@ -107,8 +111,9 @@ namespace WebApplication.Controllers
                 KPI.DonViTinh = model.DonViTinh;
                 KPI.GhiChu = model.GhiChu;
                 KPI.Email = model.Email ?? user;
-
                 db.Entry(KPI).State = EntityState.Modified;
+
+                LogInfo(model);
                 db.SaveChanges();
                 return RedirectToAction("Details", new { id = -KPI.idKPI });
             }
@@ -133,6 +138,8 @@ namespace WebApplication.Controllers
             if (model.KP1.Email != user)
                 return HttpNotFound();
             db.KPIs.Remove(model);
+
+            LogInfo(model);
             db.SaveChanges();
             return RedirectToAction("Details", new { id = -model.idKPI });
         }
@@ -168,31 +175,75 @@ namespace WebApplication.Controllers
 
         public ActionResult Finish(int id)
         {
-            ViewBag.Names = db.KpiUsers.First().Names;
             return View(db.KPIs.Find(-id));
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Finish(KPI model)
+        public ActionResult Finish(KPI model, HttpPostedFileWrapper upload)
         {
             model.id = model.id > 0 ? -model.id : model.id;
             if (ModelState.IsValid)
             {
-                var user = User.Identity.Name.Split('@')[0];
-                var KPI = db.KPIs.Find(model.id);
-                if (KPI.Email != user && KPI.KP1.Email != user)
-                    return HttpNotFound();
-                KPI.KetQua = model.KetQua;
-                KPI.GhiChu2 = model.GhiChu2;
+                using (var scope = new TransactionScope())
+                {
+                    var user = User.Identity.Name.Split('@')[0];
+                    var KPI = db.KPIs.Find(model.id);
+                    if (KPI.Email != user && KPI.KP1.Email != user)
+                        return HttpNotFound();
+                    KPI.KetQua = model.KetQua;
+                    KPI.GhiChu2 = model.GhiChu2;
+                    KPI.Filename = upload?.FileName;
+                    db.Entry(KPI).State = EntityState.Modified;
 
-                db.Entry(KPI).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Details", new { id = -KPI.idKPI });
+                    LogInfo(model);
+                    db.SaveChanges();
+
+                    if (upload != null)
+                        upload.SaveAs(Server.MapPath("~/App_Data/") + -model.id);
+
+                    scope.Complete();
+                    return RedirectToAction("Details", new { id = -KPI.idKPI });
+                }
             }
 
             ViewBag.Names = db.KpiUsers.First().Names;
             return View(db.KPIs.Find(model.id));
+        }
+
+        private void LogInfo(KPI model)
+        {
+            db.KpiLogs.Add(new KpiLog
+            {
+                stamp = DateTime.Now,
+                Email = User.Identity.Name.Split('@').First(),
+                Action = Request.RequestContext.RouteData.GetRequiredString("action"),
+                Content = model.MucTieu
+            });
+        }
+
+        public ActionResult Download(int id)
+        {
+            return File(Server.MapPath("~/App_Data/" + id), "*", db.KPIs.Find(-id).Filename);
+        }
+
+        public ActionResult Remove(int id)
+        {
+            var user = User.Identity.Name.Split('@')[0];
+            var KPI = db.KPIs.Find(-id);
+            if (KPI.Email != user && KPI.KP1.Email != user)
+                return HttpNotFound();
+            using (var scope = new TransactionScope())
+            {
+                KPI.Filename = null;
+                db.Entry(KPI).State = EntityState.Modified;
+                LogInfo(KPI);
+                db.SaveChanges();
+
+                System.IO.File.Delete(Server.MapPath("~/App_Data/") + id);
+                scope.Complete();
+                return RedirectToAction("Finish", new { id });
+            }
         }
 
         protected override void Dispose(bool disposing)

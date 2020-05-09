@@ -3,7 +3,7 @@
     ViewBag.Title = "Finish";
 }
 
-@using (Html.BeginForm())
+@using (Html.BeginForm("Finish", "KPI", FormMethod.Post, new { enctype = "multipart/form-data" }))
 {
     @Html.AntiForgeryToken()
     
@@ -42,10 +42,18 @@
 
         <div class="form-group">
             @Html.LabelFor(model => model.GhiChu2, "Ghi chú", htmlAttributes: new { @class = "control-label col-md-2" })
-            <abbr title="Ghi cụ thể về kết quả đã thực hiện">*</abbr>
+            <abbr class="text-danger" title="Ghi cụ thể về kết quả đã thực hiện">*</abbr>
             <div class="col-md-10">
                 @Html.EditorFor(model => model.GhiChu2, new { htmlAttributes = new { @class = "form-control", required = true } })
                 @Html.ValidationMessageFor(model => model.GhiChu2, "", new { @class = "text-danger" })
+                @if (!String.IsNullOrEmpty(Model.Filename) && System.IO.File.Exists(Server.MapPath("~/App_Data/") + -Model.id))
+                {
+                    <div class="input-group">
+                        <input type="text" value="@Model.Filename" class="form-control" disabled />
+                        <a class="btn btn-danger input-group-addon" href="@Url.Action("Remove", new { id = -Model.id })" onclick="return confirming();">Xóa file</a>
+                    </div>
+                }
+                <input type="file" name="Upload" class="form-control" />
             </div>
         </div>
 
@@ -60,4 +68,10 @@
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script>
+        function confirming() {
+            if (!confirm('Xóa file @Model.Filename?'))
+                return false;
+        }
+    </script>
 }

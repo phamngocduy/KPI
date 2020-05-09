@@ -1,6 +1,7 @@
 ﻿@model IEnumerable<KPI>
 @{
     ViewBag.Title = "Index";
+    var KpiLogs = ViewBag.KpiLogs as List<KpiLog>;
 }
 
 @functions {
@@ -68,5 +69,33 @@ else
             </td>
         </tr>
     }
-
 </table>
+
+<blockquote class="blockquote">
+    @foreach (var item in KpiLogs.OrderByDescending(l => l.stamp))
+    {
+        <footer class="blockquote-footer">
+            @@@item.Email
+            @switch (item.Action)
+            {
+                case "Create":
+                    <span>thêm mới</span>
+                    break;
+                case "Update":
+                    <span>cập nhật</span>
+                    break;
+                case "Delete":
+                    <span>xóa bỏ</span>
+                    break;
+                case "Finish":
+                    <span>hoàn thành</span>
+                    break;
+                case "Remove":
+                    <span>xóa file</span>
+                    break;
+                }
+            <cite title="Source Title"><strong>@item.Content</strong></cite>
+            <span>vào @item.stamp.ToString(new System.Globalization.CultureInfo("vi-vn"))</span>
+        </footer>
+    }
+</blockquote>

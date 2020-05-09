@@ -81,9 +81,21 @@ else
             }
             @if (item.KetQua > 0)
             {
-                <abbr class="pull-right" title="@item.GhiChu2">
-                    <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
-                </abbr>
+                if (!String.IsNullOrEmpty(item.Filename) &&
+                    System.IO.File.Exists(Server.MapPath("~/App_Data/") + -item.id))
+                {
+                    <abbr class="pull-right" title="@item.GhiChu2">
+                        <a href="@Url.Action("Download", new { id = -item.id })">
+                            <span class="glyphicon glyphicon-paperclip" aria-hidden="true"></span>
+                        </a>
+                    </abbr>
+                }
+                else
+                {
+                    <abbr class="pull-right" title="@item.GhiChu2">
+                        <span class="glyphicon glyphicon-tag" aria-hidden="true"></span>
+                    </abbr>
+                }
             }
         </td>
         <td style="padding-left:0;padding-right:0">
